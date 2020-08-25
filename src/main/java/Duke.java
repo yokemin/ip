@@ -12,11 +12,20 @@ public class Duke {
         System.out.println("added: " + userInput);
         System.out.println(horizontalLine);
         listOfTasks[itemCount] = userInput; // add item to list
-        itemCount++;
     }
 
     public static void createTaskObject(String userInput, int itemCount) {
         arrayOfTasks[itemCount] = new Task(userInput);
+    }
+
+    // marks tasks as done
+    public static void markTaskAsDone(String userInput) {
+        userInput = userInput.replaceAll("[^0-9]", "");
+        int taskNo = Integer.parseInt(userInput);
+        arrayOfTasks[taskNo - 1].markAsDone();
+        System.out.println("Nice! I have marked this task as done: ");
+        System.out.println("[" + arrayOfTasks[taskNo-1].getStatusIcon() + "]" + arrayOfTasks[taskNo - 1].getDescription());
+        System.out.println(horizontalLine);
     }
 
     // ends program when reader says 'bye'
@@ -32,10 +41,10 @@ public class Duke {
     }
 
     // prints items on current list
-    public static void viewList(String[] listOfTasks, int itemCount) {
+    public static void viewTasks(Task[] arrayOfTasks, int itemCount) {
         System.out.println("Here are the tasks in your list: ");
         for (int i = 1; i <= itemCount; i++) {
-            System.out.println(i + ". " + listOfTasks[i-1]);
+            System.out.println(i + ". " + "[" + arrayOfTasks[i-1].getStatusIcon() + "]" + arrayOfTasks[i-1].getDescription());
         }
         System.out.println(horizontalLine);
     }
@@ -59,11 +68,15 @@ public class Duke {
         String userInput = scan.nextLine();
         while (sayBye(userInput) == 0) {
             if (userInput.toLowerCase().contains("list")) {
-                viewList(listOfTasks, itemCount);
+                viewTasks(arrayOfTasks, itemCount);
+            }
+            else if (userInput.toLowerCase().contains("done")) {
+                markTaskAsDone(userInput);
             }
             else {
                 addTaskToList(userInput);
                 createTaskObject(userInput, itemCount);
+                itemCount++;
             }
             userInput = scan.nextLine();
         }
