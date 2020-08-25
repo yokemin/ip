@@ -3,7 +3,6 @@ import java.util.Scanner;
 public class Duke {
 
     public static String horizontalLine = "____________________________________________________________";
-    public static String[] listOfTasks = new String[100]; // Assume no more than 100 tasks
 
     public static void echo(String userInput){
         System.out.println(userInput);
