@@ -4,12 +4,19 @@ public class Duke {
 
     public static String horizontalLine = "____________________________________________________________";
     public static String[] listOfTasks = new String[100]; // Assume no more than 100 tasks
+    public static Task[] arrayOfTasks = new Task[100]; // Assume no more than 100 tasks
     public static int itemCount = 0;
 
     // tells reader what was added
-    public static void echo(String userInput){
+    public static void addTaskToList(String userInput) {
         System.out.println("added: " + userInput);
         System.out.println(horizontalLine);
+        listOfTasks[itemCount] = userInput; // add item to list
+        itemCount++;
+    }
+
+    public static void createTaskObject(String userInput, int itemCount) {
+        arrayOfTasks[itemCount] = new Task(userInput);
     }
 
     // ends program when reader says 'bye'
@@ -26,6 +33,7 @@ public class Duke {
 
     // prints items on current list
     public static void viewList(String[] listOfTasks, int itemCount) {
+        System.out.println("Here are the tasks in your list: ");
         for (int i = 1; i <= itemCount; i++) {
             System.out.println(i + ". " + listOfTasks[i-1]);
         }
@@ -54,9 +62,8 @@ public class Duke {
                 viewList(listOfTasks, itemCount);
             }
             else {
-                echo(userInput);
-                listOfTasks[itemCount] = userInput; // add item to list
-                itemCount++;
+                addTaskToList(userInput);
+                createTaskObject(userInput, itemCount);
             }
             userInput = scan.nextLine();
         }
