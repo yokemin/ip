@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Duke {
 
     public static String horizontalLine = "____________________________________________________________";
+    public static String[] listOfTasks = new String[100]; // Assume no more than 100 tasks
 
     public static void echo(String userInput){
         System.out.println(userInput);
@@ -37,10 +38,10 @@ public class Duke {
         // Level 1. Greet, Echo, Exit
         Scanner scan = new Scanner(System.in);
         String userInput = scan.nextLine();
-        do {
+        while (sayBye(userInput) == 0) {
             echo(userInput);
             userInput = scan.nextLine();
-        } while (sayBye(userInput) == 0);
+        }
 
     }
 }
