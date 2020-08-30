@@ -7,10 +7,26 @@ public class Duke {
     public static int itemCount = 0;
 
     public static void addTaskToArray(String userInput, int itemCount) {
-        arrayOfTasks[itemCount] = new Task(userInput);
+        if (userInput.contains("/by")) {
+            int descriptionIndex = userInput.indexOf("deadline") + 9;
+            int byIndex = userInput.indexOf("/by");
+            arrayOfTasks[itemCount] = new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        }
+        else if (userInput.contains("/at")) {
+            int descriptionIndex = userInput.indexOf("event") + 6;
+            int byIndex = userInput.indexOf("/at");
+            arrayOfTasks[itemCount] = new Event(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        }
+        else if (userInput.contains("todo")){
+            int descriptionIndex = userInput.indexOf("todo") + 5;
+            arrayOfTasks[itemCount] = new Todo(userInput.substring(descriptionIndex));
+        }
+        else {
+            arrayOfTasks[itemCount] = new Task(userInput);
+        }
         System.out.println("Got it. I've added this task:" + System.lineSeparator() + arrayOfTasks[itemCount]);
+        System.out.println("Now you have " + (itemCount+1) + " tasks in the list.");
         System.out.println(horizontalLine);
-        itemCount++;
     }
 
     // marks tasks as done
@@ -20,6 +36,15 @@ public class Duke {
         arrayOfTasks[taskNo - 1].markAsDone();
         System.out.println("Nice! I have marked this task as done: ");
         System.out.println(arrayOfTasks[taskNo-1]);
+        System.out.println(horizontalLine);
+    }
+
+    // prints items on current arrayOfTasks
+    public static void viewTasks(Task[] arrayOfTasks, int itemCount) {
+        System.out.println("Here are the tasks in your list: ");
+        for (int i = 1; i <= itemCount; i++) {
+            System.out.println(i + ". " + arrayOfTasks[i-1]);
+        }
         System.out.println(horizontalLine);
     }
 
@@ -49,18 +74,22 @@ public class Duke {
         System.out.println("What can I do for you?");
         System.out.println(horizontalLine);
 
-        // Add, list and exit
+        // if-else loop for different inputs from user
         Scanner scan = new Scanner(System.in);
         String userInput = scan.nextLine();
+        // Clean text input
+        userInput = userInput.toLowerCase().trim();
+
         while (sayBye(userInput) == 0) {
-            if (userInput.toLowerCase().contains("list")) {
-                Task.viewTasks(arrayOfTasks, itemCount);
+            if (userInput.contains("list")) {
+                viewTasks(arrayOfTasks, itemCount);
             }
-            else if (userInput.toLowerCase().contains("done")) {
+            else if (userInput.contains("done")) {
                 markTaskAsDone(userInput);
             }
             else {
                 addTaskToArray(userInput, itemCount);
+                itemCount++;
             }
             userInput = scan.nextLine();
         }
