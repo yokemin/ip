@@ -24,7 +24,7 @@ public class Duke {
         int taskNo = Integer.parseInt(userInput);
         arrayOfTasks[taskNo - 1].markAsDone();
         System.out.println("Nice! I have marked this task as done: ");
-        System.out.println("[" + arrayOfTasks[taskNo-1].getStatusIcon() + "]" + arrayOfTasks[taskNo - 1].getDescription());
+        System.out.println(arrayOfTasks[taskNo-1]);
         System.out.println(horizontalLine);
     }
 
@@ -38,15 +38,6 @@ public class Duke {
         else {
             return 0;
         }
-    }
-
-    // prints items on current list
-    public static void viewTasks(Task[] arrayOfTasks, int itemCount) {
-        System.out.println("Here are the tasks in your list: ");
-        for (int i = 1; i <= itemCount; i++) {
-            System.out.println(i + ". " + "[" + arrayOfTasks[i-1].getStatusIcon() + "]" + arrayOfTasks[i-1].getDescription());
-        }
-        System.out.println(horizontalLine);
     }
 
     public static void main(String[] args) {
@@ -68,7 +59,7 @@ public class Duke {
         String userInput = scan.nextLine();
         while (sayBye(userInput) == 0) {
             if (userInput.toLowerCase().contains("list")) {
-                viewTasks(arrayOfTasks, itemCount);
+                Task.viewTasks(arrayOfTasks, itemCount);
             }
             else if (userInput.toLowerCase().contains("done")) {
                 markTaskAsDone(userInput);
