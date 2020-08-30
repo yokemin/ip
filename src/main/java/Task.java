@@ -27,7 +27,7 @@ public class Task {
         return "[" + getStatusIcon() + "] " + getDescription();
     }
 
-    // prints items on current list
+    // prints items on current arrayOfTasks
     public static void viewTasks(Task[] arrayOfTasks, int itemCount) {
         System.out.println("Here are the tasks in your list: ");
         for (int i = 1; i <= itemCount; i++) {

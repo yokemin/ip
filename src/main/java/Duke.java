@@ -3,19 +3,14 @@ import java.util.Scanner;
 public class Duke {
 
     public static String horizontalLine = "____________________________________________________________";
-    public static String[] listOfTasks = new String[100]; // Assume no more than 100 tasks
     public static Task[] arrayOfTasks = new Task[100]; // Assume no more than 100 tasks
     public static int itemCount = 0;
 
-    // tells reader what was added
-    public static void addTaskToList(String userInput) {
-        System.out.println("added: " + userInput);
-        System.out.println(horizontalLine);
-        listOfTasks[itemCount] = userInput; // add item to list
-    }
-
-    public static void createTaskObject(String userInput, int itemCount) {
+    public static void addTaskToArray(String userInput, int itemCount) {
         arrayOfTasks[itemCount] = new Task(userInput);
+        System.out.println("Got it. I've added this task:" + System.lineSeparator() + arrayOfTasks[itemCount]);
+        System.out.println(horizontalLine);
+        itemCount++;
     }
 
     // marks tasks as done
@@ -65,9 +60,7 @@ public class Duke {
                 markTaskAsDone(userInput);
             }
             else {
-                addTaskToList(userInput);
-                createTaskObject(userInput, itemCount);
-                itemCount++;
+                addTaskToArray(userInput, itemCount);
             }
             userInput = scan.nextLine();
         }
