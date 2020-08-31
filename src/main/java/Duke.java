@@ -8,18 +8,13 @@ public class Duke {
 
     public static void addTaskToArray(String userInput, int itemCount) {
         if (userInput.contains("/by")) {
-            int descriptionIndex = userInput.indexOf("deadline") + 9;
-            int byIndex = userInput.indexOf("/by");
-            arrayOfTasks[itemCount] = new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+            addDeadlineToArray(userInput, itemCount);
         }
         else if (userInput.contains("/at")) {
-            int descriptionIndex = userInput.indexOf("event") + 6;
-            int byIndex = userInput.indexOf("/at");
-            arrayOfTasks[itemCount] = new Event(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+            addEventToArray(userInput, itemCount);
         }
         else if (userInput.contains("todo")){
-            int descriptionIndex = userInput.indexOf("todo") + 5;
-            arrayOfTasks[itemCount] = new Todo(userInput.substring(descriptionIndex));
+            addTodoToArray(userInput, itemCount);
         }
         else {
             arrayOfTasks[itemCount] = new Task(userInput);
@@ -27,6 +22,23 @@ public class Duke {
         System.out.println("Got it. I've added this task:" + System.lineSeparator() + arrayOfTasks[itemCount]);
         System.out.println("Now you have " + (itemCount+1) + " tasks in the list.");
         System.out.println(horizontalLine);
+    }
+
+    public static void addTodoToArray(String userInput, int itemCount) {
+        int descriptionIndex = userInput.indexOf("todo") + 5;
+        arrayOfTasks[itemCount] = new Todo(userInput.substring(descriptionIndex));
+    }
+
+    public static void addEventToArray(String userInput, int itemCount) {
+        int descriptionIndex = userInput.indexOf("event") + 6;
+        int byIndex = userInput.indexOf("/at");
+        arrayOfTasks[itemCount] = new Event(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+    }
+
+    public static void addDeadlineToArray(String userInput, int itemCount) {
+        int descriptionIndex = userInput.indexOf("deadline") + 9;
+        int byIndex = userInput.indexOf("/by");
+        arrayOfTasks[itemCount] = new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
     }
 
     // marks tasks as done
