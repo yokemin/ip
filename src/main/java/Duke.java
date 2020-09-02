@@ -46,14 +46,14 @@ public class Duke {
         userInput = userInput.replaceAll("[^0-9]", "");
         int taskNo = Integer.parseInt(userInput);
         arrayOfTasks[taskNo - 1].markAsDone();
-        System.out.println("Nice! I have marked this task as done: ");
+        System.out.println("Nice! I have marked this task as done:");
         System.out.println(arrayOfTasks[taskNo-1]);
         System.out.println(horizontalLine);
     }
 
     // prints items on current arrayOfTasks
     public static void viewTasks(Task[] arrayOfTasks, int itemCount) {
-        System.out.println("Here are the tasks in your list: ");
+        System.out.println("Here are the tasks in your list:");
         for (int i = 1; i <= itemCount; i++) {
             System.out.println(i + ". " + arrayOfTasks[i-1]);
         }
