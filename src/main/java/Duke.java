@@ -13,7 +13,8 @@ public class Duke {
     public static final String KEYWORD_DONE = "done";
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
     public static boolean invalidInput = false;
-    public static Task[] arrayOfTasks = new Task[100]; // Assume no more than 100 tasks
+    public static final int MAX_NO_OF_TASKS = 100;
+    public static Task[] arrayOfTasks = new Task[MAX_NO_OF_TASKS]; // Assume no more than 100 tasks
     public static int taskCount = 0;
 
 
