@@ -41,12 +41,13 @@ public class Duke {
 
         // if-else loop for different inputs from user
         Scanner scan = new Scanner(System.in);
-        String userInput = scan.nextLine();
-        handleErrorUserInputs(userInput);
+        String userInput;
+
+        userInput = getUserInput(scan);
+
         // Clean text input, handle errors
         while (invalidInput) {
-            userInput = scan.nextLine();
-            handleErrorUserInputs(userInput);
+            userInput = getUserInput(scan);
         }
 
         while (sayBye(userInput) == 0) {
@@ -58,14 +59,35 @@ public class Duke {
                 addTaskToArray(userInput);
                 taskCount++;
             }
-            userInput = scan.nextLine();
-            handleErrorUserInputs(userInput);
+            userInput = getUserInput(scan);
+
+            // Clean text input, handle errors
             while (invalidInput) {
-                userInput = scan.nextLine();
-                handleErrorUserInputs(userInput);
+                userInput = getUserInput(scan);
             }
         }
 
+    }
+
+    public static String getUserInput(Scanner scan) {
+        String userInput;
+        userInput = scan.nextLine();
+        try {
+            handleErrorUserInputs(userInput);
+        } catch (TaskException e) {
+            invalidInput = true;
+            System.out.println("☹ OOPS!!! The description of a " + KEYWORD_TODO + " cannot be empty.");
+            System.out.println(HORIZONTAL_LINE);
+        } catch (EventException e) {
+            invalidInput = true;
+            System.out.println("☹ OOPS!!! The description of a " + KEYWORD_EVENT + " cannot be empty or is incomplete (/at).");
+            System.out.println(HORIZONTAL_LINE);
+        } catch (DeadlineException e) {
+            invalidInput = true;
+            System.out.println("☹ OOPS!!! The description of a " + KEYWORD_DEADLINE + " cannot be empty or is incomplete (/by).");
+            System.out.println(HORIZONTAL_LINE);
+        }
+        return userInput;
     }
 
 
@@ -105,7 +127,7 @@ public class Duke {
         int taskNo = Integer.parseInt(userInput);
         // handle error where task no is out of range
         if (taskNo > taskCount) {
-            System.out.println("Duke.Task number is out of range.");
+            System.out.println("Task number is out of range.");
             System.out.println(HORIZONTAL_LINE);
         } else {
             arrayOfTasks[taskNo - 1].markAsDone();
@@ -140,15 +162,13 @@ public class Duke {
         }
     }
 
-    public static void handleErrorUserInputs(String userInput) {
+    public static void handleErrorUserInputs(String userInput) throws TaskException, EventException, DeadlineException {
         userInput = userInput.toLowerCase().trim();
 
         // check if todo description is empty
         if (userInput.contains(KEYWORD_TODO)) {
             if (userInput.substring(ADD_INDEX_TO_TODO - 1).trim().isEmpty()) {
-                invalidInput = true;
-                System.out.println("☹ OOPS!!! The description of a " + KEYWORD_TODO + " cannot be empty.");
-                System.out.println(HORIZONTAL_LINE);
+                throw new TaskException();
             } else {
                 invalidInput = false;
             }
@@ -157,9 +177,7 @@ public class Duke {
             if (userInput.substring(ADD_INDEX_TO_EVENT - 1).trim().isEmpty()
                     || !(userInput.contains("/at"))
                     || userInput.substring(userInput.indexOf("/at") + 3).trim().isEmpty()) {
-                invalidInput = true;
-                System.out.println("☹ OOPS!!! The description of a " + KEYWORD_EVENT + " cannot be empty or is incomplete (/at).");
-                System.out.println(HORIZONTAL_LINE);
+                throw new EventException();
             } else {
                 invalidInput = false;
             }
@@ -168,9 +186,7 @@ public class Duke {
             if (userInput.substring(ADD_INDEX_TO_DEADLINE - 1).trim().isEmpty()
                     || !(userInput.contains("/by"))
                     || userInput.substring(userInput.indexOf("/by") + 3).trim().isEmpty() ) {
-                invalidInput = true;
-                System.out.println("☹ OOPS!!! The description of a " + KEYWORD_DEADLINE + " cannot be empty or is incomplete (/by).");
-                System.out.println(HORIZONTAL_LINE);
+                throw new DeadlineException();
             } else {
                 invalidInput = false;
             }
