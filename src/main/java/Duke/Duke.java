@@ -1,3 +1,5 @@
+package Duke;
+
 import java.util.Scanner;
 
 public class Duke {
@@ -28,7 +30,7 @@ public class Duke {
 
         // Greet user
         System.out.println(HORIZONTAL_LINE);
-        System.out.println("Hello! I'm Duke");
+        System.out.println("Hello! I'm Duke.Duke");
         System.out.println("What can I do for you?");
         System.out.println(HORIZONTAL_LINE);
 
@@ -98,7 +100,7 @@ public class Duke {
         int taskNo = Integer.parseInt(userInput);
         // handle error where task no is out of range
         if (taskNo > taskCount) {
-            System.out.println("Task number is out of range.");
+            System.out.println("Duke.Task number is out of range.");
             System.out.println(HORIZONTAL_LINE);
         } else {
             arrayOfTasks[taskNo - 1].markAsDone();
