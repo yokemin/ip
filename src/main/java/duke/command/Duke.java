@@ -124,17 +124,22 @@ public class Duke {
     // marks tasks as done
     public static void markTaskAsDone(String userInput) {
         userInput = userInput.replaceAll("[^0-9]", "");
-        int taskNo = Integer.parseInt(userInput);
-        // handle error where task no is out of range
-        if (taskNo > taskCount) {
-            System.out.println("Task number is out of range.");
-            System.out.println(HORIZONTAL_LINE);
-        } else {
-            arrayOfTasks[taskNo - 1].markAsDone();
-            System.out.println("Nice! I have marked this task as done:");
-            System.out.println(arrayOfTasks[taskNo-1]);
-            System.out.println(HORIZONTAL_LINE);
+        try {
+            int taskNo = Integer.parseInt(userInput);
+            // handle error where task no is out of range
+            if (taskNo > taskCount) {
+                System.out.println("You only have " + taskCount + " task(s)!");
+            } else {
+                arrayOfTasks[taskNo - 1].markAsDone();
+                System.out.println("Nice! I have marked this task as done:");
+                System.out.println(arrayOfTasks[taskNo-1]);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input! Input format should have an integer e.g. done 2");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Invalid Input! Integer cannot be 0!");
         }
+        System.out.println(HORIZONTAL_LINE);
     }
 
     // prints items on current arrayOfTasks
@@ -166,30 +171,14 @@ public class Duke {
         userInput = userInput.toLowerCase().trim();
 
         // check if todo description is empty
-        if (userInput.contains(KEYWORD_TODO)) {
-            if (userInput.substring(ADD_INDEX_TO_TODO - 1).trim().isEmpty()) {
-                throw new TaskException();
-            } else {
-                invalidInput = false;
-            }
+        if (userInput.contains(KEYWORD_TODO) && !(userInput.contains(KEYWORD_EVENT)) && !(userInput.contains(KEYWORD_DEADLINE))) {
+            validateTodo(userInput);
             // check if event description is empty
-        } else if (userInput.contains(KEYWORD_EVENT)) {
-            if (userInput.substring(ADD_INDEX_TO_EVENT - 1).trim().isEmpty()
-                    || !(userInput.contains("/at"))
-                    || userInput.substring(userInput.indexOf("/at") + 3).trim().isEmpty()) {
-                throw new EventException();
-            } else {
-                invalidInput = false;
-            }
+        } else if (userInput.contains(KEYWORD_EVENT) && !(userInput.contains(KEYWORD_TODO)) && !(userInput.contains(KEYWORD_DEADLINE))) {
+            validateEvent(userInput);
             // check if deadline description is empty
-        } else if (userInput.contains(KEYWORD_DEADLINE)) {
-            if (userInput.substring(ADD_INDEX_TO_DEADLINE - 1).trim().isEmpty()
-                    || !(userInput.contains("/by"))
-                    || userInput.substring(userInput.indexOf("/by") + 3).trim().isEmpty() ) {
-                throw new DeadlineException();
-            } else {
-                invalidInput = false;
-            }
+        } else if (userInput.contains(KEYWORD_DEADLINE) && !(userInput.contains(KEYWORD_TODO)) && !(userInput.contains(KEYWORD_EVENT))) {
+            validateDeadline(userInput);
             // check if keyword were used in userInput
         } else if (userInput.contains(KEYWORD_LIST)
                 || userInput.contains(KEYWORD_BYE)
@@ -200,6 +189,34 @@ public class Duke {
             invalidInput = true;
             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
             System.out.println(HORIZONTAL_LINE);
+        }
+    }
+
+    public static void validateDeadline(String userInput) throws DeadlineException {
+        if (userInput.substring(ADD_INDEX_TO_DEADLINE - 1).trim().isEmpty()
+                || !(userInput.contains("/by"))
+                || userInput.substring(userInput.indexOf("/by") + 3).trim().isEmpty() ) {
+            throw new DeadlineException();
+        } else {
+            invalidInput = false;
+        }
+    }
+
+    public static void validateEvent(String userInput) throws EventException {
+        if (userInput.substring(ADD_INDEX_TO_EVENT - 1).trim().isEmpty()
+                || !(userInput.contains("/at"))
+                || userInput.substring(userInput.indexOf("/at") + 3).trim().isEmpty()) {
+            throw new EventException();
+        } else {
+            invalidInput = false;
+        }
+    }
+
+    public static void validateTodo(String userInput) throws TaskException {
+        if (userInput.substring(ADD_INDEX_TO_TODO - 1).trim().isEmpty()) {
+            throw new TaskException();
+        } else {
+            invalidInput = false;
         }
     }
 }
