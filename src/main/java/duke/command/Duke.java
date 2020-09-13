@@ -19,11 +19,11 @@ public class Duke {
     public static final String KEYWORD_BYE = "bye";
     public static final String KEYWORD_LIST = "list";
     public static final String KEYWORD_DONE = "done";
+    private static final String KEYWORD_DELETE = "delete";
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
     public static boolean invalidInput = false;
     public static final int MAX_NO_OF_TASKS = 100;
     private static ArrayList<Task> arrayOfTasks = new ArrayList<>();
-    public static int taskCount = 0;
 
 
     public static void main(String[] args) {
@@ -56,9 +56,10 @@ public class Duke {
                 viewTasks(arrayOfTasks);
             } else if (userInput.contains(KEYWORD_DONE)) {
                 markTaskAsDone(userInput);
+            } else if (userInput.contains(KEYWORD_DELETE)) {
+                deleteTask(userInput);
             } else {
                 addTaskToArray(userInput);
-                taskCount++;
             }
             userInput = getUserInput(scan);
 
@@ -68,6 +69,26 @@ public class Duke {
             }
         }
 
+    }
+
+    private static void deleteTask(String userInput) {
+        userInput = userInput.replaceAll("[^0-9]", "");
+        try {
+            int taskNo = Integer.parseInt(userInput);
+            // handle error where task no is out of range
+            if (taskNo > arrayOfTasks.size()) {
+                System.out.println("You only have " + arrayOfTasks.size() + " task(s)!");
+            } else {
+                System.out.println("Noted. I've removed this task: " + System.lineSeparator() + arrayOfTasks.get(taskNo - 1));
+                arrayOfTasks.remove(taskNo - 1);
+                System.out.println("Now you have " + arrayOfTasks.size() + " tasks in the list.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input! Input format should have an integer e.g. done 2");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid Input! Integer cannot be 0!");
+        }
+        System.out.println(HORIZONTAL_LINE);
     }
 
     public static String getUserInput(Scanner scan) {
@@ -138,8 +159,8 @@ public class Duke {
         try {
             int taskNo = Integer.parseInt(userInput);
             // handle error where task no is out of range
-            if (taskNo > taskCount) {
-                System.out.println("You only have " + taskCount + " task(s)!");
+            if (taskNo > arrayOfTasks.size()) {
+                System.out.println("You only have " + arrayOfTasks.size() + " task(s)!");
             } else {
                 arrayOfTasks.get(taskNo - 1).markAsDone();
                 System.out.println("Nice! I have marked this task as done:" + arrayOfTasks.get(taskNo - 1));
@@ -192,7 +213,8 @@ public class Duke {
             // check if keyword were used in userInput
         } else if (userInput.contains(KEYWORD_LIST)
                 || userInput.contains(KEYWORD_BYE)
-                || userInput.contains(KEYWORD_DONE)) {
+                || userInput.contains(KEYWORD_DONE)
+                || userInput.contains(KEYWORD_DELETE)) {
             invalidInput = false;
             // incorrect input
         } else {
