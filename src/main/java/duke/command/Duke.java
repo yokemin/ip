@@ -5,6 +5,7 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
@@ -21,7 +22,7 @@ public class Duke {
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
     public static boolean invalidInput = false;
     public static final int MAX_NO_OF_TASKS = 100;
-    public static Task[] arrayOfTasks = new Task[MAX_NO_OF_TASKS]; // Assume no more than 100 tasks
+    private static ArrayList<Task> arrayOfTasks = new ArrayList<>();
     public static int taskCount = 0;
 
 
@@ -92,33 +93,43 @@ public class Duke {
 
 
     public static void addTaskToArray(String userInput) {
+        Task taskAdded = null;
         if (userInput.contains(KEYWORD_DEADLINE)) {
-            addDeadlineToArray(userInput);
+            taskAdded = addDeadlineToArray(userInput);
         } else if (userInput.contains(KEYWORD_EVENT)) {
-            addEventToArray(userInput);
+            taskAdded = addEventToArray(userInput);
         } else if (userInput.contains(KEYWORD_TODO)){
-            addTodoToArray(userInput);
+            taskAdded = addTodoToArray(userInput);
         }
-        System.out.println("Got it. I've added this task:" + System.lineSeparator() + arrayOfTasks[taskCount]);
-        System.out.println("Now you have " + (taskCount+1) + " tasks in the list.");
+        System.out.println("Got it. I've added this task:" + System.lineSeparator() + taskAdded);
+        System.out.println("Now you have " + arrayOfTasks.size() + " tasks in the list.");
         System.out.println(HORIZONTAL_LINE);
     }
 
-    public static void addTodoToArray(String userInput) {
+    public static Todo addTodoToArray(String userInput) {
         int descriptionIndex = userInput.indexOf("todo") + ADD_INDEX_TO_TODO;
-        arrayOfTasks[taskCount] = new Todo(userInput.substring(descriptionIndex));
+        // add Todo to arraylist
+        Todo todoAdded = new Todo(userInput.substring(descriptionIndex));
+        arrayOfTasks.add(todoAdded);
+        return todoAdded;
     }
 
-    public static void addEventToArray(String userInput) {
+    public static Event addEventToArray(String userInput) {
         int descriptionIndex = userInput.indexOf("event") + ADD_INDEX_TO_EVENT;
         int byIndex = userInput.indexOf("/at");
-        arrayOfTasks[taskCount] = new Event(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        // add Event to arraylist
+        Event eventAdded = new Event(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        arrayOfTasks.add(eventAdded);
+        return eventAdded;
     }
 
-    public static void addDeadlineToArray(String userInput) {
+    public static Deadline addDeadlineToArray(String userInput) {
         int descriptionIndex = userInput.indexOf("deadline") + ADD_INDEX_TO_DEADLINE;
         int byIndex = userInput.indexOf("/by");
-        arrayOfTasks[taskCount] = new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        // add Deadline to arraylist
+        Deadline deadlineAdded = new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        arrayOfTasks.add(deadlineAdded);
+        return deadlineAdded;
     }
 
     // marks tasks as done
@@ -130,27 +141,26 @@ public class Duke {
             if (taskNo > taskCount) {
                 System.out.println("You only have " + taskCount + " task(s)!");
             } else {
-                arrayOfTasks[taskNo - 1].markAsDone();
-                System.out.println("Nice! I have marked this task as done:");
-                System.out.println(arrayOfTasks[taskNo-1]);
+                arrayOfTasks.get(taskNo - 1).markAsDone();
+                System.out.println("Nice! I have marked this task as done:" + arrayOfTasks.get(taskNo - 1));
             }
         } catch (NumberFormatException e) {
             System.out.println("Invalid Input! Input format should have an integer e.g. done 2");
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("Invalid Input! Integer cannot be 0!");
         }
         System.out.println(HORIZONTAL_LINE);
     }
 
     // prints items on current arrayOfTasks
-    public static void viewTasks(Task[] arrayOfTasks) {
+    public static void viewTasks(ArrayList<Task> arrayOfTasks) {
         // handle error case where no tasks in array
-        if (taskCount == 0) {
+        if (arrayOfTasks.size() == 0) {
             System.out.println("There are no tasks in your list.");
         } else {
             System.out.println("Here are the tasks in your list:");
-            for (int i = 1; i <= taskCount; i++) {
-                System.out.println(i + ". " + arrayOfTasks[i-1]);
+            for (int i = 1; i <= arrayOfTasks.size(); i++) {
+                System.out.println(i + ". " + arrayOfTasks.get(i - 1));
             }
         }
         System.out.println(HORIZONTAL_LINE);
