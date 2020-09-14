@@ -5,10 +5,8 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -47,15 +45,17 @@ public class Duke {
 
         // Load data from file in hard disk
         String fileName = "duke.txt";
-        Path filePath = null;
 
         try {
             loadFile(fileName);
-            filePath = Paths.get(fileName);
-        } catch (FileNotFoundException e) {
+        } catch (NoSuchFileException e) {
+            // it automatically creates a new file in updateFile method
 //            File f = new File(fileName); // create a File for the given file path
 //            filePath = Paths.get(fileName);
             System.out.println("File not found, new duke.txt file created");
+            System.out.println(HORIZONTAL_LINE);
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
         }
 
 
@@ -82,7 +82,7 @@ public class Duke {
             }
             // Update file
             try {
-                updateFile(filePath);
+                updateFile(Path.of(fileName));
             } catch (IOException e) {
                 System.out.println("Something went wrong: " + e.getMessage());
             }
@@ -98,8 +98,8 @@ public class Duke {
 
     }
 
-    private static void loadFile(String filePath) throws FileNotFoundException {
-        Scanner s = new Scanner(filePath); // create a Scanner using the File as the source
+    private static void loadFile(String fileName) throws NoSuchFileException, IOException {
+        Scanner s = new Scanner(Path.of(fileName)); // create a Scanner using the File as the source
         while (s.hasNext()) {
             String fileInput = s.nextLine();
             if (fileInput.contains("[T]")) {
