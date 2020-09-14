@@ -8,7 +8,6 @@ import duke.task.Todo;
 import java.io.*;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -52,7 +51,7 @@ public class Duke {
             // it automatically creates a new file in updateFile method
 //            File f = new File(fileName); // create a File for the given file path
 //            filePath = Paths.get(fileName);
-            System.out.println("File not found, new duke.txt file created");
+            System.out.println("File not found, new duke.txt file created.");
             System.out.println(HORIZONTAL_LINE);
         } catch (IOException e) {
             System.out.println("Something went wrong: " + e.getMessage());
