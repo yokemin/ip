@@ -5,6 +5,12 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +28,6 @@ public class Duke {
     private static final String KEYWORD_DELETE = "delete";
     public static final String HORIZONTAL_LINE = "____________________________________________________________";
     public static boolean invalidInput = false;
-    public static final int MAX_NO_OF_TASKS = 100;
     private static ArrayList<Task> arrayOfTasks = new ArrayList<>();
 
 
@@ -40,7 +45,21 @@ public class Duke {
         System.out.println("What can I do for you?");
         System.out.println(HORIZONTAL_LINE);
 
-        // if-else loop for different inputs from user
+        // Load data from file in hard disk
+        String fileName = "duke.txt";
+        Path filePath = null;
+
+        try {
+            loadFile(fileName);
+            filePath = Paths.get(fileName);
+        } catch (FileNotFoundException e) {
+//            File f = new File(fileName); // create a File for the given file path
+//            filePath = Paths.get(fileName);
+            System.out.println("File not found, new duke.txt file created");
+        }
+
+
+        // Get 1st user input
         Scanner scan = new Scanner(System.in);
         String userInput;
 
@@ -61,6 +80,14 @@ public class Duke {
             } else {
                 addTaskToArray(userInput);
             }
+            // Update file
+            try {
+                updateFile(filePath);
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
+
+            // Get new userInput
             userInput = getUserInput(scan);
 
             // Clean text input, handle errors
@@ -69,6 +96,57 @@ public class Duke {
             }
         }
 
+    }
+
+    private static void loadFile(String filePath) throws FileNotFoundException {
+        Scanner s = new Scanner(filePath); // create a Scanner using the File as the source
+        while (s.hasNext()) {
+            String fileInput = s.nextLine();
+            if (fileInput.contains("[T]")) {
+                addTodoFromFile(fileInput);
+            } else if (fileInput.contains("[E]")) {
+                addEventFromFile(fileInput);
+            } else if (fileInput.contains("[D]")) {
+                addDeadlineFromFile(fileInput);
+            }
+        }
+        viewTasks(arrayOfTasks);
+    }
+
+    private static void addDeadlineFromFile(String fileInput) {
+        int byIndex = fileInput.indexOf("(by:");
+        Deadline deadlineAdded = new Deadline(fileInput.substring(7, byIndex), fileInput.substring(byIndex + 5, fileInput.indexOf(")")));
+        arrayOfTasks.add(deadlineAdded);
+        if (fileInput.contains("\u2713")) {
+            arrayOfTasks.get(arrayOfTasks.size() - 1).markAsDone();
+        }
+    }
+
+    private static void addEventFromFile(String fileInput) {
+        int byIndex = fileInput.indexOf("(at:");
+        Event eventAdded = new Event(fileInput.substring(7, byIndex), fileInput.substring(byIndex + 5, fileInput.indexOf(")")));
+        arrayOfTasks.add(eventAdded);
+        if (fileInput.contains("\u2713")) {
+            arrayOfTasks.get(arrayOfTasks.size() - 1).markAsDone();
+        }
+    }
+
+    private static void addTodoFromFile(String fileInput) {
+        Todo todoAdded = new Todo(fileInput.substring(7));
+        arrayOfTasks.add(todoAdded);
+        if (fileInput.contains("\u2713")) {
+            arrayOfTasks.get(arrayOfTasks.size() - 1).markAsDone();
+        }
+    }
+
+    // Update file according to changes to list of tasks
+    private static void updateFile(Path filePath) throws IOException {
+        FileWriter fw = new FileWriter(String.valueOf(filePath));
+        for (Task t : arrayOfTasks) {
+            fw.write(t.toString() + System.lineSeparator());
+        }
+        fw.write("There are a total of " + arrayOfTasks.size() + " tasks in the list.");
+        fw.close();
     }
 
     private static void deleteTask(String userInput) {
