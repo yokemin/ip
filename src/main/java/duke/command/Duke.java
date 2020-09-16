@@ -234,8 +234,9 @@ public class Duke {
             System.out.println("Invalid Input! Input format should have an integer e.g. done 2");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Invalid Input! Integer cannot be 0!");
+        } finally {
+            System.out.println(HORIZONTAL_LINE);
         }
-        System.out.println(HORIZONTAL_LINE);
     }
 
     // Delete tasks
