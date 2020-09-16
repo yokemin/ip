@@ -148,26 +148,6 @@ public class Duke {
         fw.close();
     }
 
-    private static void deleteTask(String userInput) {
-        userInput = userInput.replaceAll("[^0-9]", "");
-        try {
-            int taskNo = Integer.parseInt(userInput);
-            // handle error where task no is out of range
-            if (taskNo > arrayOfTasks.size()) {
-                System.out.println("You only have " + arrayOfTasks.size() + " task(s)!");
-            } else {
-                System.out.println("Noted. I've removed this task: " + System.lineSeparator() + arrayOfTasks.get(taskNo - 1));
-                arrayOfTasks.remove(taskNo - 1);
-                System.out.println("Now you have " + arrayOfTasks.size() + " tasks in the list.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid Input! Input format should have an integer e.g. done 2");
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Invalid Input! Integer cannot be 0!");
-        } finally {
-            System.out.println(HORIZONTAL_LINE);
-        }
-    }
 
     public static String getUserInput(Scanner scan) {
         String userInput;
@@ -250,6 +230,29 @@ public class Duke {
         }
         System.out.println(HORIZONTAL_LINE);
     }
+
+    // Delete tasks
+    private static void deleteTask(String userInput) {
+        userInput = userInput.replaceAll("[^0-9]", "");
+        try {
+            int taskNo = Integer.parseInt(userInput);
+            // handle error where task no is out of range
+            if (taskNo > arrayOfTasks.size()) {
+                System.out.println("You only have " + arrayOfTasks.size() + " task(s)!");
+            } else {
+                System.out.println("Noted. I've removed this task: " + System.lineSeparator() + arrayOfTasks.get(taskNo - 1));
+                arrayOfTasks.remove(taskNo - 1);
+                System.out.println("Now you have " + arrayOfTasks.size() + " tasks in the list.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Input! Input format should have an integer e.g. done 2");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid Input! Integer cannot be 0!");
+        } finally {
+            System.out.println(HORIZONTAL_LINE);
+        }
+    }
+
 
     // prints items on current arrayOfTasks
     public static void viewTasks(ArrayList<Task> arrayOfTasks) {
