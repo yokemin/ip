@@ -51,7 +51,7 @@ public class Duke {
             // it automatically creates a new file in updateFile method
 //            File f = new File(fileName); // create a File for the given file path
 //            filePath = Paths.get(fileName);
-            System.out.println("File not found, new duke.txt file created.");
+            System.out.println("File not found, new duke.txt file will be created.");
             System.out.println(HORIZONTAL_LINE);
         } catch (IOException e) {
             System.out.println("Something went wrong: " + e.getMessage());
@@ -101,12 +101,19 @@ public class Duke {
         Scanner s = new Scanner(Path.of(fileName)); // create a Scanner using the File as the source
         while (s.hasNext()) {
             String fileInput = s.nextLine();
-            if (fileInput.contains("[T]")) {
+            String taskIcon = fileInput.substring(0, 3);
+            switch (taskIcon) {
+            case "[T]":
                 addTodoFromFile(fileInput);
-            } else if (fileInput.contains("[E]")) {
+                break;
+            case "[E]":
                 addEventFromFile(fileInput);
-            } else if (fileInput.contains("[D]")) {
+                break;
+            case "[D]":
                 addDeadlineFromFile(fileInput);
+                break;
+            default:
+                break;
             }
         }
         viewTasks(arrayOfTasks);
