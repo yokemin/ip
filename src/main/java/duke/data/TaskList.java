@@ -88,6 +88,16 @@ public class TaskList {
         System.out.println(HORIZONTAL_LINE);
     }
 
+    public ArrayList<Task> findTasks(String keyword) {
+        ArrayList<Task> relatedTasks = new ArrayList<>();
+        for (Task t : arrayOfTasks) {
+            if (t.toString().toLowerCase().contains(keyword)) {
+                relatedTasks.add(t);
+            }
+        }
+        return relatedTasks;
+    }
+
 //    public void sortByDateTime() {
 //        //compare dates
 //        System.out.println(d1.isBefore(d2)); // -> true

@@ -19,23 +19,26 @@ public class Parser {
     private static final String TODO_ERROR = "☹ OOPS!!! The description of a todo cannot be empty.";
     private static final String EVENT_ERROR = "☹ OOPS!!! The description of an event cannot be empty or is incomplete (/at).";
     private static final String DEADLINE_ERROR = "☹ OOPS!!! The description of a deadline cannot be empty or is incomplete (/by).";
-    public static final String KEYWORD_TODO = "todo";
-    public static final String KEYWORD_EVENT = "event";
-    public static final String KEYWORD_DEADLINE = "deadline";
+    private static final String KEYWORD_TODO = "todo";
+    private static final String KEYWORD_EVENT = "event";
+    private static final String KEYWORD_DEADLINE = "deadline";
+    private static final String KEYWORD_LIST = "list";
+    private static final String KEYWORD_DONE = "done";
+    private static final String KEYWORD_DELETE = "delete";
+    private static final String KEYWORD_FIND = "find";
     public static final String KEYWORD_BYE = "bye";
-    public static final String KEYWORD_LIST = "list";
-    public static final String KEYWORD_DONE = "done";
-    public static final String KEYWORD_DELETE = "delete";
-    public static final int ADD_INDEX_TO_TODO = 5;
-    public static final int ADD_INDEX_TO_EVENT = 6;
-    public static final int ADD_INDEX_TO_DEADLINE = 9;
-    public static final String TASK_NUM_INPUT_ERROR = "Invalid Input! Input format should have an integer!";
-    public static final String TASK_NUM_ZERO_ERROR = "Invalid Input! Integer cannot be 0!";
-    public static final String UNKNOWN_COMMAND_ERROR = "☹ OOPS!!! I'm sorry, but I don't know what that means :-(";
-    public static final String DATETIME_FORMAT_ERROR = "Date and Time format should be \"YYYY-MM-DD HR:MIN\" (Time is optional)";
-    public static final String INPUT_DATE_FORMAT = "yyyy-MM-dd";
-    public static final String INPUT_TIME_FORMAT = "HH:mm";
-    public static final int LENGTH_OF_DATE = 10;
+
+    private static final int ADD_INDEX_TO_TODO = 5;
+    private static final int ADD_INDEX_TO_EVENT = 6;
+    private static final int ADD_INDEX_TO_DEADLINE = 9;
+    private static final int ADD_INDEX_TO_FIND = 5;
+    private static final String TASK_NUM_INPUT_ERROR = "Invalid Input! Input format should have an integer!";
+    private static final String TASK_NUM_ZERO_ERROR = "Invalid Input! Integer cannot be 0!";
+    private static final String UNKNOWN_COMMAND_ERROR = "☹ OOPS!!! I'm sorry, but I don't know what that means :-(";
+    private static final String DATETIME_FORMAT_ERROR = "Date and Time format should be \"YYYY-MM-DD HR:MIN\" (Time is optional)";
+    private static final String INPUT_DATE_FORMAT = "yyyy-MM-dd";
+    private static final String INPUT_TIME_FORMAT = "HH:mm";
+    private static final int LENGTH_OF_DATE = 10;
     public static boolean invalidInput = false;
 
 
@@ -55,7 +58,8 @@ public class Parser {
         } else if (userInput.contains(KEYWORD_LIST)
                 || userInput.contains(KEYWORD_BYE)
                 || userInput.contains(KEYWORD_DONE)
-                || userInput.contains(KEYWORD_DELETE)) {
+                || userInput.contains(KEYWORD_DELETE)
+                || userInput.contains(KEYWORD_FIND)) {
             invalidInput = false;
             // incorrect input
         } else {
@@ -99,6 +103,8 @@ public class Parser {
             return new DoneCommand();
         } else if (userInput.contains(KEYWORD_DELETE)) {
             return new DeleteCommand();
+        } else if (userInput.contains(KEYWORD_FIND)) {
+            return new FindCommand();
         } else if (userInput.contains(KEYWORD_BYE)) {
             return new ByeCommand();
         } else if (!userInput.contains(KEYWORD_BYE)) {
@@ -168,15 +174,13 @@ public class Parser {
         try {
             description = description.substring(0, LENGTH_OF_DATE);
             date = LocalDate.parse(description, formatter);
-        } catch (DateTimeParseException e) {
-            throw new DukeException(DATETIME_FORMAT_ERROR);
-        } catch (StringIndexOutOfBoundsException e) {
+        } catch (DateTimeParseException | StringIndexOutOfBoundsException e) {
             throw new DukeException(DATETIME_FORMAT_ERROR);
         }
         return date;
     }
 
-    public static LocalTime parseTime(String description) throws DukeException{
+    public static LocalTime parseTime(String description) {
         //create time from strings
         LocalTime time;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(INPUT_TIME_FORMAT);
@@ -184,12 +188,14 @@ public class Parser {
             int timeIndex = description.indexOf(" ");
             description = description.substring(timeIndex + 1);
             time = LocalTime.parse(description, formatter);
-        } catch (DateTimeParseException e) {
-            time = null;;
-        } catch (StringIndexOutOfBoundsException e) {
+        } catch (DateTimeParseException | StringIndexOutOfBoundsException e) {
             time = null;
         }
         return time;
     }
 
+    public static String getKeyword(String userInput) {
+        int descriptionIndex = userInput.indexOf("find") + ADD_INDEX_TO_FIND;
+        return userInput.substring(descriptionIndex).trim().toLowerCase();
+    }
 }

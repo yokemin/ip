@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -67,7 +66,7 @@ public class Storage {
         }
     }
 
-    public static void addTaskFromFile(String fileInput, String taskIcon, ArrayList<Task> arrayOfTasks) throws DukeException {
+    public static void addTaskFromFile(String fileInput, String taskIcon, ArrayList<Task> arrayOfTasks) {
         switch (taskIcon) {
         case "[T]":
             addTodoFromFile(fileInput, arrayOfTasks);
@@ -83,7 +82,7 @@ public class Storage {
         }
     }
 
-    private static void addDeadlineFromFile(String fileInput, ArrayList<Task> arrayOfTasks) throws DukeException {
+    private static void addDeadlineFromFile(String fileInput, ArrayList<Task> arrayOfTasks) {
         int byIndex = fileInput.indexOf("(by:");
         String byDescription = fileInput.substring(byIndex + 5, fileInput.indexOf(")"));
         LocalDate date = formatDate(byDescription);
