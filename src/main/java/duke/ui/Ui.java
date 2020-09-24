@@ -30,6 +30,7 @@ public class Ui {
     /**
      * ends program when reader says 'bye'
      * @param byeInput userInput
+     * @return isBye boolean value, true if userInput contains 'bye'
      */
     public boolean sayBye(String byeInput) {
         if (byeInput.toLowerCase().contains(KEYWORD_BYE)) {
@@ -72,7 +73,7 @@ public class Ui {
 
     /**
      * Prints the error message for errors encountered when loading duke.txt file.
-     * @param message error message to be printed
+     * @param message Error message to be printed
      */
     public void showLoadingError(String message) {
         System.out.println(message);
@@ -81,7 +82,7 @@ public class Ui {
 
     /**
      * Prints the error message for errors encountered when parsing user inputs or executing commands in the program
-     * @param message
+     * @param message Error message to be printed
      */
     public void showErrorMessage(String message) {
         System.out.println(message);
