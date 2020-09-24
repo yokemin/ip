@@ -41,7 +41,11 @@ public class Parser {
     private static final int LENGTH_OF_DATE = 10;
     public static boolean invalidInput = false;
 
-
+    /**
+     * Deals with invalid user inputs
+     * @param userInput returned by <code>getUserInput()</code> method in Ui class
+     * @throws DukeException
+     */
     public static void handleErrorUserInputs(String userInput) throws DukeException {
         userInput = userInput.toLowerCase().trim();
 
@@ -96,6 +100,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Given user input, it parses through the input and determines the command to be executed.
+     * @param userInput returned by <code>getUserInput()</code> method in Ui class
+     * @return Command Instantiates a command class that extends from abstract class Command
+     * @throws DukeException
+     */
     public static Command parseCommand(String userInput) throws DukeException {
         if (userInput.contains(KEYWORD_LIST)) {
             return new ListCommand();
@@ -114,6 +124,12 @@ public class Parser {
         }
     }
 
+    /**
+     * parses through <code>userInput</code> to instantiates Tasks to be added to the Arraylist of Tasks
+     * @param userInput
+     * @return taskToAdd Task object to be added
+     * @throws DukeException
+     */
     public static Task getTask(String userInput) throws DukeException {
         Task taskToAdd = null;
         if (userInput.contains(KEYWORD_DEADLINE)) {
@@ -153,6 +169,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses through <code>userInput</code> and determines the task number
+     * Only relevant to <code>delete</code> and <code>done</code> commands
+     * @param userInput
+     * @return taskNo task number
+     * @throws DukeException thrown when it catches <code>NumberFormatException</code>
+     */
     public static int getTaskNo(String userInput) throws DukeException {
         userInput = userInput.replaceAll("[^0-9]", "");
         int taskNo;
@@ -167,7 +190,7 @@ public class Parser {
         return taskNo;
     }
 
-    public static LocalDate parseDate(String description) throws DukeException{
+    private static LocalDate parseDate(String description) throws DukeException{
         //create dates from strings
         LocalDate date;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(INPUT_DATE_FORMAT);
@@ -180,7 +203,7 @@ public class Parser {
         return date;
     }
 
-    public static LocalTime parseTime(String description) {
+    private static LocalTime parseTime(String description) {
         //create time from strings
         LocalTime time;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(INPUT_TIME_FORMAT);
