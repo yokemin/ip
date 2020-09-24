@@ -1,4 +1,4 @@
-package duke.task;
+package duke.data.task;
 
 public class Task {
     protected String description;

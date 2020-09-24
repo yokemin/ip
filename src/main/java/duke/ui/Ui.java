@@ -1,7 +1,7 @@
 package duke.ui;
 
 
-import duke.exception.DukeException;
+import duke.data.exception.DukeException;
 import duke.parser.Parser;
 
 import java.util.Scanner;

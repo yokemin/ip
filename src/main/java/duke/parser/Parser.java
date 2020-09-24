@@ -2,11 +2,11 @@ package duke.parser;
 
 
 import duke.command.*;
-import duke.exception.DukeException;
-import duke.task.Deadline;
-import duke.task.Event;
-import duke.task.Task;
-import duke.task.Todo;
+import duke.data.exception.DukeException;
+import duke.data.task.Deadline;
+import duke.data.task.Event;
+import duke.data.task.Task;
+import duke.data.task.Todo;
 
 import static duke.Duke.HORIZONTAL_LINE;
 

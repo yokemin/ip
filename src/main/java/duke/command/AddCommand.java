@@ -1,11 +1,11 @@
 package duke.command;
 
 
-import duke.exception.DukeException;
+import duke.data.exception.DukeException;
 import duke.parser.Parser;
 import duke.storage.Storage;
-import duke.task.Task;
-import duke.task.TaskList;
+import duke.data.task.Task;
+import duke.data.TaskList;
 
 import java.nio.file.Path;
 
