@@ -27,6 +27,7 @@ public class Parser {
     public static final int ADD_INDEX_TO_DEADLINE = 9;
     public static final String TASK_NUM_INPUT_ERROR = "Invalid Input! Input format should have an integer!";
     public static final String TASK_NUM_ZERO_ERROR = "Invalid Input! Integer cannot be 0!";
+    public static final String UNKNOWN_COMMAND_ERROR = "☹ OOPS!!! I'm sorry, but I don't know what that means :-(";
     public static boolean invalidInput = false;
 
 
@@ -51,8 +52,7 @@ public class Parser {
             // incorrect input
         } else {
             invalidInput = true;
-            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-            System.out.println(HORIZONTAL_LINE);
+            throw new DukeException(UNKNOWN_COMMAND_ERROR);
         }
     }
 
