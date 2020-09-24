@@ -91,8 +91,10 @@ public class Parser {
             return new DeleteCommand();
         } else if (userInput.contains(KEYWORD_BYE)) {
             return new ByeCommand();
-        } else {
+        } else if (!userInput.contains(KEYWORD_BYE)) {
             return new AddCommand();
+        } else {
+            throw new DukeException("Command Error!");
         }
     }
 
@@ -128,7 +130,7 @@ public class Parser {
         return new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
     }
 
-    public static int getDoneTaskNo(String userInput) throws DukeException {
+    public static int getTaskNo(String userInput) throws DukeException {
         userInput = userInput.replaceAll("[^0-9]", "");
         int taskNo;
         try {
@@ -142,16 +144,4 @@ public class Parser {
         return taskNo;
     }
 
-    public static int getDeleteTaskNo(String userInput) throws DukeException {
-        int taskNo;
-        userInput = userInput.replaceAll("[^0-9]", "");
-        try {
-            taskNo = Integer.parseInt(userInput);
-        } catch (NumberFormatException e) {
-            throw new DukeException(TASK_NUM_INPUT_ERROR);
-        } catch (IndexOutOfBoundsException e) {
-            throw new DukeException(TASK_NUM_ZERO_ERROR);
-        }
-        return taskNo;
-    }
 }

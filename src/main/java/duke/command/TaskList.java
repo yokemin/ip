@@ -77,8 +77,8 @@ public class TaskList {
             System.out.println("You only have " + arrayOfTasks.size() + " task(s)!");
             System.out.println(HORIZONTAL_LINE);
         } else {
-            arrayOfTasks.remove(taskNo - 1);
             printTaskDeleted(taskNo);
+            arrayOfTasks.remove(taskNo - 1);
         }
     }
 
