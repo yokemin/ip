@@ -8,7 +8,11 @@ import duke.data.task.Event;
 import duke.data.task.Task;
 import duke.data.task.Todo;
 
-import static duke.Duke.HORIZONTAL_LINE;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 public class Parser {
 
@@ -28,6 +32,10 @@ public class Parser {
     public static final String TASK_NUM_INPUT_ERROR = "Invalid Input! Input format should have an integer!";
     public static final String TASK_NUM_ZERO_ERROR = "Invalid Input! Integer cannot be 0!";
     public static final String UNKNOWN_COMMAND_ERROR = "☹ OOPS!!! I'm sorry, but I don't know what that means :-(";
+    public static final String DATETIME_FORMAT_ERROR = "Date and Time format should be \"YYYY-MM-DD HR:MIN\" (Time is optional)";
+    public static final String INPUT_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String INPUT_TIME_FORMAT = "HH:mm";
+    public static final int LENGTH_OF_DATE = 10;
     public static boolean invalidInput = false;
 
 
@@ -100,7 +108,7 @@ public class Parser {
         }
     }
 
-    public static Task getTask(String userInput) {
+    public static Task getTask(String userInput) throws DukeException {
         Task taskToAdd = null;
         if (userInput.contains(KEYWORD_DEADLINE)) {
             taskToAdd = getDeadline(userInput);
@@ -125,11 +133,18 @@ public class Parser {
         return new Event(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
     }
 
-    private static Deadline getDeadline(String userInput) {
+    private static Deadline getDeadline(String userInput) throws DukeException {
         int descriptionIndex = userInput.indexOf("deadline") + ADD_INDEX_TO_DEADLINE;
         int byIndex = userInput.indexOf("/by");
         // Create Deadline
-        return new Deadline(userInput.substring(descriptionIndex, byIndex-1), userInput.substring(byIndex + 4));
+        String byDescription = userInput.substring(byIndex + 4);
+        LocalDate date = parseDate(byDescription);
+        LocalTime time = parseTime(byDescription);
+        try {
+            return new Deadline(userInput.substring(descriptionIndex, byIndex-1), date, time);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new DukeException(DEADLINE_ERROR);
+        }
     }
 
     public static int getTaskNo(String userInput) throws DukeException {
@@ -144,6 +159,37 @@ public class Parser {
             throw new DukeException(TASK_NUM_INPUT_ERROR);
         }
         return taskNo;
+    }
+
+    public static LocalDate parseDate(String description) throws DukeException{
+        //create dates from strings
+        LocalDate date;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(INPUT_DATE_FORMAT);
+        try {
+            description = description.substring(0, LENGTH_OF_DATE);
+            date = LocalDate.parse(description, formatter);
+        } catch (DateTimeParseException e) {
+            throw new DukeException(DATETIME_FORMAT_ERROR);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new DukeException(DATETIME_FORMAT_ERROR);
+        }
+        return date;
+    }
+
+    public static LocalTime parseTime(String description) throws DukeException{
+        //create time from strings
+        LocalTime time;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(INPUT_TIME_FORMAT);
+        try {
+            int timeIndex = description.indexOf(" ");
+            description = description.substring(timeIndex + 1);
+            time = LocalTime.parse(description, formatter);
+        } catch (DateTimeParseException e) {
+            time = null;;
+        } catch (StringIndexOutOfBoundsException e) {
+            time = null;
+        }
+        return time;
     }
 
 }

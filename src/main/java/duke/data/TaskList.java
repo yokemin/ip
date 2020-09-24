@@ -73,8 +73,8 @@ public class TaskList {
 
     // Delete tasks
     public void deleteTask(int taskNo) {
-        if (taskNo > arrayOfTasks.size()) {
-            System.out.println("You only have " + arrayOfTasks.size() + " task(s)!");
+        if (taskNo > getNoOfTasks()) {
+            System.out.println("You only have " + getNoOfTasks() + " task(s)!");
             System.out.println(HORIZONTAL_LINE);
         } else {
             printTaskDeleted(taskNo);
@@ -84,8 +84,15 @@ public class TaskList {
 
     public void printTaskDeleted(int taskNo) {
         System.out.println("Noted. I've removed this task: " + System.lineSeparator() + getTaskFromIndex(taskNo - 1));
-        System.out.println("Now you have " + arrayOfTasks.size() + " tasks in the list.");
+        System.out.println("Now you have " + (getNoOfTasks() - 1) + " tasks in the list.");
         System.out.println(HORIZONTAL_LINE);
     }
+
+//    public void sortByDateTime() {
+//        //compare dates
+//        System.out.println(d1.isBefore(d2)); // -> true
+//        System.out.println(d1.isAfter(d2)); // -> false
+//        System.out.println(d2.equals(d3)); // -> true
+//    }
 
 }

@@ -11,6 +11,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,6 +23,9 @@ public class Storage {
     private static final String UPDATE_FILE_ERROR = "Something went wrong when updating file.";
     private static final String LOAD_FILE_ERROR = "Something went wrong when loading file.";
     private static final String NO_FILE_ERROR = "File not found, new duke.txt file will be created.";
+    public static final String DATE_FORMAT_OF_FILE = "MMM dd yyyy";
+    private static final int LENGTH_OF_DATE = 11;
+    public static final String TIME_FORMAT_OF_FILE = "HH:mm";
     public static String fileName;
 
     public Storage(String filePath) {
@@ -60,7 +67,7 @@ public class Storage {
         }
     }
 
-    public static void addTaskFromFile(String fileInput, String taskIcon, ArrayList<Task> arrayOfTasks) {
+    public static void addTaskFromFile(String fileInput, String taskIcon, ArrayList<Task> arrayOfTasks) throws DukeException {
         switch (taskIcon) {
         case "[T]":
             addTodoFromFile(fileInput, arrayOfTasks);
@@ -76,20 +83,43 @@ public class Storage {
         }
     }
 
-    private static void addDeadlineFromFile(String fileInput, ArrayList<Task> arrayOfTasks) {
+    private static void addDeadlineFromFile(String fileInput, ArrayList<Task> arrayOfTasks) throws DukeException {
         int byIndex = fileInput.indexOf("(by:");
-        Deadline deadlineAdded = new Deadline(fileInput.substring(7, byIndex), fileInput.substring(byIndex + 5, fileInput.indexOf(")")));
+        String byDescription = fileInput.substring(byIndex + 5, fileInput.indexOf(")"));
+        LocalDate date = formatDate(byDescription);
+        LocalTime time = formatTime(byDescription);
+        Deadline deadlineAdded = new Deadline(fileInput.substring(7, byIndex), date, time);
         arrayOfTasks.add(deadlineAdded);
         if (fileInput.contains("\u2713")) {
             arrayOfTasks.get(arrayOfTasks.size() - 1).markAsDone();
         }
     }
 
+    private static LocalDate formatDate(String description) {
+        LocalDate date;
+        description = description.substring(0, LENGTH_OF_DATE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_OF_FILE);
+        date = LocalDate.parse(description, formatter);
+        return date;
+    }
+
+    private static LocalTime formatTime(String description) {
+        LocalTime time;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT_OF_FILE);
+        try {
+            description = description.substring(LENGTH_OF_DATE + 1);
+            time = LocalTime.parse(description, formatter);
+        } catch (StringIndexOutOfBoundsException e) {
+            time = null;
+        }
+        return time;
+    }
+
     private static void addEventFromFile(String fileInput, ArrayList<Task> arrayOfTasks) {
         int byIndex = fileInput.indexOf("(at:");
         Event eventAdded = new Event(fileInput.substring(7, byIndex), fileInput.substring(byIndex + 5, fileInput.indexOf(")")));
         arrayOfTasks.add(eventAdded);
-        if (fileInput.contains("\u2713")) {
+        if (fileInput.contains(Task.TICK_SYMBOL)) {
             arrayOfTasks.get(arrayOfTasks.size() - 1).markAsDone();
         }
     }
