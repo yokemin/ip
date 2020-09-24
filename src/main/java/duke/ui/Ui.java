@@ -16,6 +16,9 @@ public class Ui {
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
 
+    /**
+     * Greets user when program starts
+     */
     public void greetUser(){
         System.out.println("Hello from\n" + logo);
         System.out.println(HORIZONTAL_LINE);
@@ -24,7 +27,10 @@ public class Ui {
         System.out.println(HORIZONTAL_LINE);
     }
 
-    // ends program when reader says 'bye'
+    /**
+     * ends program when reader says 'bye'
+     * @param byeInput userInput
+     */
     public boolean sayBye(String byeInput) {
         if (byeInput.toLowerCase().contains(KEYWORD_BYE)) {
             System.out.println("Bye. Hope to see you again soon!");
@@ -35,6 +41,12 @@ public class Ui {
         }
     }
 
+    /**
+     * Gets user input that will determine next command
+     * @return userInput
+     * @throws DukeException catches possible errors caused by invalid user inputs
+     * @see Parser
+     */
     public static String getUserInput() throws DukeException {
 
         // Get first user input
@@ -58,11 +70,19 @@ public class Ui {
     public Ui() {
     }
 
+    /**
+     * Prints the error message for errors encountered when loading duke.txt file.
+     * @param message error message to be printed
+     */
     public void showLoadingError(String message) {
         System.out.println(message);
         System.out.println(HORIZONTAL_LINE);
     }
 
+    /**
+     * Prints the error message for errors encountered when parsing user inputs or executing commands in the program
+     * @param message
+     */
     public void showErrorMessage(String message) {
         System.out.println(message);
         System.out.println(HORIZONTAL_LINE);
