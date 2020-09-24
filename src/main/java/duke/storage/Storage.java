@@ -31,6 +31,13 @@ public class Storage {
         fileName = filePath;
     }
 
+    /**
+     * Checks if duke.txt file exists.
+     * If it does not, a new duke.txt file will be created.
+     * If it does, it will process the list of tasks in the file and loads all tasks into the program
+     * @return
+     * @throws DukeException catches <code>IOException</code> and <code>NoSuchFileException</code> and throws new DukeException.
+     */
     public ArrayList<Task> load() throws DukeException {
 
         ArrayList<Task> arrayOfTasks = new ArrayList<>();
@@ -52,7 +59,13 @@ public class Storage {
         return arrayOfTasks;
     }
 
-    // Update file according to changes to list of tasks
+    /**
+     * Update file according to changes to made to list of tasks
+     * @param tasks Instance of TaskList class
+     * @param filePath Path of duke.txt file
+     * @throws DukeException
+     * @see TaskList
+     */
     public static void updateFile(TaskList tasks, Path filePath) throws DukeException {
         try {
             FileWriter fw = new FileWriter(String.valueOf(filePath));
@@ -66,6 +79,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Adds task from duke.txt file to the list of tasks in the program
+     * @param fileInput duke.txt file scanned line by line
+     * @param taskIcon indicates if a task is to be marked as done
+     * @param arrayOfTasks Arraylist of Tasks
+     * @see Task
+     */
     public static void addTaskFromFile(String fileInput, String taskIcon, ArrayList<Task> arrayOfTasks) {
         switch (taskIcon) {
         case "[T]":
