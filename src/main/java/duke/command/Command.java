@@ -1,9 +1,9 @@
 package duke.command;
 
-import java.nio.file.Path;
+import duke.exception.DukeException;
+import duke.task.TaskList;
 
-import static duke.command.Parser.*;
-import static duke.command.Parser.KEYWORD_BYE;
+import java.nio.file.Path;
 
 public abstract class Command {
 
