@@ -17,6 +17,10 @@ public class Duke {
     private final Ui ui;
     private TaskList tasks;
 
+    /**
+     * Constructor for Duke class
+     * @param filePath Path of duke.txt file
+     */
     public Duke(String filePath) {
         ui = new Ui();
         ui.greetUser();
@@ -30,6 +34,9 @@ public class Duke {
         }
     }
 
+    /**
+     * Runs Duke program
+     */
     public void run() {
         boolean isBye = false;
         while (!isBye) {
