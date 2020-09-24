@@ -19,11 +19,15 @@ public class FindCommand extends Command {
     }
 
     private void printRelatedTasks(ArrayList<Task> relatedTasks) {
-        System.out.println("Here are the matching tasks in your list:");
-        int i = 1;
-        for (Task t : relatedTasks) {
-            System.out.println(i + ": " + t.toString());
-            i++;
+        if (relatedTasks.size() == 0) {
+            System.out.println("No tasks matches your keyword.");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            int i = 1;
+            for (Task t : relatedTasks) {
+                System.out.println(i + ": " + t.toString());
+                i++;
+            }
         }
         System.out.println(HORIZONTAL_LINE);
     }
