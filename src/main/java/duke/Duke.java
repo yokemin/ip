@@ -29,8 +29,8 @@ public class Duke {
         while (!isBye) {
             try {
                 String userInput = Ui.getUserInput();
-                tasks.executeUserCommand(userInput);
-                Storage.updateFile(tasks, Path.of(Storage.fileName));
+                Command command = Parser.parseCommand(userInput);
+                command.executeCommand(userInput, tasks, Path.of(Storage.fileName));
                 isBye = ui.sayBye(userInput);
             } catch (DukeException e) {
                 ui.showErrorMessage(e.getMessage());
