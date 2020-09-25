@@ -107,21 +107,23 @@ public class Parser {
      * @throws DukeException
      */
     public static Command parseCommand(String userInput) throws DukeException {
+        Command result;
         if (userInput.contains(KEYWORD_LIST)) {
-            return new ListCommand();
+            result = new ListCommand();
         } else if (userInput.contains(KEYWORD_DONE)) {
-            return new DoneCommand();
+            result = new DoneCommand();
         } else if (userInput.contains(KEYWORD_DELETE)) {
-            return new DeleteCommand();
+            result = new DeleteCommand();
         } else if (userInput.contains(KEYWORD_FIND)) {
-            return new FindCommand();
+            result = new FindCommand();
         } else if (userInput.contains(KEYWORD_BYE)) {
-            return new ByeCommand();
+            result = new ByeCommand();
         } else if (!userInput.contains(KEYWORD_BYE)) {
-            return new AddCommand();
+            result = new AddCommand();
         } else {
             throw new DukeException("Command Error!");
         }
+        return result;
     }
 
     /**
