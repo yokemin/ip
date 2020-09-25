@@ -1,5 +1,6 @@
 package duke.data;
 
+import duke.data.exception.DukeException;
 import duke.data.task.Task;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import static duke.Duke.HORIZONTAL_LINE;
 
 public class TaskList {
 
+    public static final String NO_TASK_IN_LIST_ERROR = "There are no tasks in your list.";
     private final ArrayList<Task> arrayOfTasks;
 
     /**
@@ -70,10 +72,10 @@ public class TaskList {
     /**
      * prints items on current arrayOfTasks
      */
-    public void viewTasks() {
+    public void viewTasks() throws DukeException {
         // handle error case where no tasks in array
         if (getNoOfTasks() == 0) {
-            System.out.println("There are no tasks in your list.");
+            throw new DukeException(NO_TASK_IN_LIST_ERROR);
         } else {
             System.out.println("Here are the tasks in your list:");
             for (int i = 1; i <= getNoOfTasks(); i++) {
