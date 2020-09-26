@@ -1,5 +1,16 @@
 # User Guide
 
+## Starting up Duke
+
+1. Move `ip.jar` file and `duke.txt` file (if any) into the same folder.
+2. Open Command Prompt (on Windows) or Terminal (on Mac)
+3. Change directory to the folder where `ip.jar` file and `duke.txt` file (if any) are stored.
+4. Change the font in Command Prompt to NSimSan
+5. Type in `chcp 65001` in Command Prompt
+6. Type in `java -Dfile.encoding=UTF-8 -jar ip.jar` to run Duke. 
+
+_________
+
 ## Features 
 
 ### Feature 1: Add todo
